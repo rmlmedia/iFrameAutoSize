@@ -4,7 +4,7 @@
  * This script is used to create auto sizing iFrames, even if they are served from a different domain.
  * NB: This script needs to be loaded into the parent page AND the embedded page so you need access to include the script on the iFrame domain
  *
- * Usage: http://scripts.deependmelbourne.com.au/iFrameAutoSize
+ * Usage: http://scripts.deependmelbourne.com.au/iFrameAutoSize.html
  * 
  * Author: Rick Lannan, Deepend
  * Version: 1.0 
@@ -45,7 +45,7 @@ var iFrameAutoSize = {
 			adjustWidth: (options && options.adjustWidth ? options.adjustWidth : false),
 			initialWidth: (options && options.initialWidth ? options.initialWidth : '100%'),
 			initialHeight: (options && options.initialHeight ? options.initialHeight : '0px'),
-			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : ''),
+			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : '')
 		}
 
 		// Check we have been passed the required parameters
