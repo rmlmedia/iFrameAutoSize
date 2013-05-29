@@ -45,7 +45,7 @@ var iFrameAutoSize = {
 			adjustWidth: (options && options.adjustWidth ? options.adjustWidth : false),
 			initialWidth: (options && options.initialWidth ? options.initialWidth : '100%'),
 			initialHeight: (options && options.initialHeight ? options.initialHeight : '0px'),
-			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : ''),
+			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : '')
 		}
 
 		// Check we have been passed the required parameters
