@@ -28,8 +28,8 @@ var iFrameAutoSize = {
 	 * id: The id of the DOM element to add the iFrame to
 	 * iFrameUrl: The src of the iFrame
 	 * resizeHelperUrl: The url of the helper frame that passes the page dimensions back to the parent (must be served from the same domain as the parent)
-	 * loaderUrl: A Url of a loader GIF that shold be shown. Default to '' (no loader)
-	 * runImmediately: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to false
+	 * loaderUrl: A Url of a loader GIF that should be shown. Default to '' (no loader)
+	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to false
 	 * adjustWidth: A boolean indicating if the iFrame width should adjust. Defaults to false
 	 * initialWidth: The initial width of the iFrame. Defaults to 100%
 	 * initialHeight: The initial height of the iFrame. Defaults to 0px
@@ -41,7 +41,7 @@ var iFrameAutoSize = {
 			iFrameUrl: (options && options.iFrameUrl ? options.iFrameUrl : ''),
 			resizeHelperUrl: (options && options.resizeHelperUrl ? options.resizeHelperUrl : ''),
 			loaderUrl: (options && options.loaderUrl ? options.loaderUrl : ''),
-			runImmediately: (options && options.runImmediately ? options.runImmediately : false),
+			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false),
 			adjustWidth: (options && options.adjustWidth ? options.adjustWidth : false),
 			initialWidth: (options && options.initialWidth ? options.initialWidth : '100%'),
 			initialHeight: (options && options.initialHeight ? options.initialHeight : '0px'),
@@ -60,9 +60,15 @@ var iFrameAutoSize = {
 						iFrameAutoSize.iFrame = document.createElement('IFRAME');
 						iFrameAutoSize.iFrame.style.width = settings.initialWidth;
 						iFrameAutoSize.iFrame.style.height = settings.initialHeight;
+						iFrameAutoSize.iFrame.style.border = 0;
 						iFrameAutoSize.iFrame.setAttribute('frameborder', 0);
-						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.divId);
+						iFrameAutoSize.iFrame.setAttribute('frameBorder', 0);  // IE7 hack
+						iFrameAutoSize.iFrame.setAttribute('border', 0);
+						iFrameAutoSize.iFrame.setAttribute('cellspacing', 0);
+						iFrameAutoSize.iFrame.setAttribute('marginwidth', 0);
+						iFrameAutoSize.iFrame.setAttribute('marginheight', 0);
 						iFrameAutoSize.iFrame.setAttribute('scrolling', 'no');
+						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.divId);
 						container.appendChild(iFrameAutoSize.iFrame);
 					}
 					iFrameAutoSize.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURI(settings.resizeHelperUrl) : ''));
@@ -73,13 +79,13 @@ var iFrameAutoSize = {
 					iFrameAutoSize.loader = document.createElement('IMG');
 					iFrameAutoSize.loader.setAttribute('src', settings.loaderUrl);
 					iFrameAutoSize.loader.style.display = 'block';
-					iFrameAutoSize.loader.style.margin = '1em auto';
+					iFrameAutoSize.loader.style.margin = '0 auto';
 					iFrameAutoSize.loader.setAttribute('id', 'iFrameAutoSize-loader');
 					container.appendChild(iFrameAutoSize.loader);
 				}
 
 				// If wating for the window.onload event, add the binding
-				if (!settings.runImmediately) {
+				if (settings.waitForPageLoad) {
 					iFrameAutoSize.helpers.addDomEvent(window, 'load', createResizingIFrame);
 				} else {
 					createResizingIFrame();
@@ -112,13 +118,15 @@ var iFrameAutoSize = {
 	 * -------
 	 * Options:
 	 * -------
+	 * domId: Will use this dom element to get sizings, can return better results cross browser to use a wrapper div. If element not found the body element will be used to determine the page size
 	 * resizeOnLoadOnly: This controls if the iFrame will keep sending messages to the parent to adjust the size. Defaults to false
-	 * runImmediately: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to false
+	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to true
 	 */
 	resize: function(options) {
 		var settings = {
+			domId: (options && options.domId ? options.domId : ''),
 			resizeOnLoadOnly: (options && options.resizeOnLoadOnly ? options.resizeOnLoadOnly : false),
-			runImmediately: (options && options.runImmediately ? options.runImmediately : false)
+			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false)
 		}
 		// Get the url of the helper frame from the query string parameters
 		var helperUrl = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl');
@@ -130,6 +138,9 @@ var iFrameAutoSize = {
 			function pipeDimensionsToParentIFrame()	{
 				// Get the page height and width
 				var pageDimensions = iFrameAutoSize.helpers.getPageDimensions();
+				if (settings.domId) {
+					pageDimensions = iFrameAutoSize.helpers.getDimensions(settings.domId);
+				}
 
 				// 'Pipe' the page dimensions to the parent through the injected helper frame (which is on the same domain as the parent)
 				var pipe = document.getElementById('iFrameAutoSizePipe');
@@ -163,7 +174,7 @@ var iFrameAutoSize = {
 			}
 
 			// If wating for the window.onload event, add the binding
-			if (!settings.runImmediately) {
+			if (settings.waitForPageLoad) {
 				iFrameAutoSize.helpers.addDomEvent(window, 'load', pipeDimensionsToParentIFrame);
 			} else {
 				pipeDimensionsToParentIFrame();
@@ -214,6 +225,19 @@ var iFrameAutoSize = {
 					Math.max(d.body.offsetHeight, d.documentElement.offsetHeight),
 					Math.max(d.body.clientHeight, d.documentElement.clientHeight)
 				)
+			}
+		},
+
+		// Cross browser function to get the dimensions of a DOM element
+		getDimensions: function(domId) {
+			var e = document.getElementById(domId);
+			if (e) {
+				return {
+					width: Math.max(Math.max(e.scrollWidth, e.offsetWidth), e.clientWidth),
+					height: Math.max(Math.max(e.scrollHeight, e.offsetHeight), e.clientHeight)
+				}
+			} else {
+				return getPageDimensions();
 			}
 		},
 

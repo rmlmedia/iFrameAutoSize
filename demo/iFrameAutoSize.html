@@ -57,19 +57,18 @@
                 </p>
             </div>
 
-            <!-- Example row of columns -->
             <div class="row">
                 <div class="span12">
-                    <h2>Usage</h2>
+                    <h2>Basic Usage</h2>
                     <p><strong>Please note:</strong> This script needs to be loaded into the parent page <strong>AND</strong> the embedded page so you need access to embed the script on the iFrame domain</p>
                     <p>On parent page, include the following before the closing body tag:</p>
                     <pre class="prettyprint linenums">
 &lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
-        divID: "xxx",
-        iFrameUrl: "//iframedomain.com/path/to"
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSize/iFrameAutoSizeHelper.html" //This is provided with iFrameResize.js
+        divID: "xxx",  // Id of dom element to add iFrame to
+        iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSize/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
     });
 &lt;/script&gt;
 </pre>
@@ -77,8 +76,43 @@
                     <pre class="prettyprint linenums">
 &lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-    iFrameAutoSize.forceParentFrame({ parentUrl: "//parentdomain.com/path/to" }); //Optional, causes the page to be redirected to another Url if directly accessed
     iFrameAutoSize.resize();
+&lt;/script&gt;
+</pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12">
+                    <h2>Advanced Usage</h2>
+                    <p>On parent page, include the following before the closing body tag:</p>
+                    <pre class="prettyprint linenums">
+&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    iFrameAutoSize.create({
+        divID: "xxx",  // Id of dom element to add iFrame to
+        iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSize/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
+        loaderUrl: "path/to/loader.gif" // Url of a loader GIF that should be shown (none shown by default)
+        waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
+        adjustWidth: false // A boolean indicating if the iFrame width should adjust too (defaults to false)
+        initialWidth: '100%' // The initial width of the iFrame (defaults to 100%)
+        initialHeight: '0px' // The initial height of the iFrame (defaults to 0px)
+        additionalCSS: '' // Extra CSS to set on the iFrame
+    });
+&lt;/script&gt;
+</pre>
+                    <p>On embedded page, include the folowing before the closing body tag:</p>
+                    <pre class="prettyprint linenums">
+&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    iFrameAutoSize.resize({
+        domId: "xxx" // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
+        resizeOnLoadOnly: false // Indicated if the resize should only occur on the initial page load (defaults to false)
+        waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
+    });
+    iFrameAutoSize.forceParentFrame({
+        parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
+    });
 &lt;/script&gt;
 </pre>
                 </div>

@@ -5,7 +5,7 @@
 			margin: 0;
 			padding: 0;
 		}
-		.container {
+		#container {
 			padding: 4px;
 			background-color: #999;
 			overflow: hidden; /*to contain floats*/
@@ -16,13 +16,15 @@
 		}
 	</style>
 	<body>
-		<div class="container">
+		<div id="container">
 			<img src="img/inception.jpg" alt="Inception - a frame within a frame" />
 		</div>
 		<script src="//scripts.deependmelbourne.com.au/js/iFrameAutoSize/iFrameAutoSize.js"></script>
 		<script> 
 			iFrameAutoSize.forceParentFrame({ parentUrl: "//scripts.deependmelbourne.com.au/" });
-			iFrameAutoSize.resize();
+			iFrameAutoSize.resize({
+				domId: 'container'
+			});
 		</script>
 	</body>
 </html>
