@@ -1,0 +1,19 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* Fix a bug with google prettify */
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8 {
+	list-style-type: inherit !important;
+}
+
+.hero-unit {
+	overflow: hidden; /*To contain floats*/
+}
+
+#iFrame, #iFrame iframe {
+	float: left;
+	width: 100%;
+}

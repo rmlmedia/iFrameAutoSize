@@ -1,0 +1,17 @@
+<!-- This page used with the iFrame Auto Size Script --> 
+<html>
+	<body onload="parentIFrameResize()"> 
+		<script> 
+			// Tell the parent iframe what height the iframe needs to be
+			function parentIFrameResize() {
+				var iFrameAutoSize = parent.parent.iFrameAutoSize;
+				if (iFrameAutoSize) {
+					var width = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'width');
+					var height = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'height');
+					// This works as our parent's parent is on our domain..
+					iFrameAutoSize.helpers.resizeIFrame(width, height);
+				}
+			}
+		</script> 
+	</body> 
+</html>
