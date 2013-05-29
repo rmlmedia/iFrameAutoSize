@@ -74,7 +74,7 @@
 </pre>
                     <p>On embedded page, include the folowing before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; // This can be pulled from the parent domain
+&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
 &lt;script&gt;
     iFrameAutoSize.resize();
 &lt;/script&gt;
@@ -103,15 +103,15 @@
 </pre>
                     <p>On embedded page, include the folowing before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; // This can be pulled from the parent domain
+&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
 &lt;script&gt;
+    iFrameAutoSize.forceParentFrame({
+        parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
+    });
     iFrameAutoSize.resize({
         domId: "xxx" // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
         resizeOnLoadOnly: false // Indicated if the resize should only occur on the initial page load (defaults to false)
         waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
-    });
-    iFrameAutoSize.forceParentFrame({
-        parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
     });
 &lt;/script&gt;
 </pre>
