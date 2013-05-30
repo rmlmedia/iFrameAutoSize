@@ -63,18 +63,18 @@
                     <p><strong>Please note:</strong> This script needs to be loaded into the parent page <strong>AND</strong> the embedded page so you need access to embed the script on the iFrame domain</p>
                     <p>On parent page, include the following before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
         divID: "xxx",  // Id of dom element to add iFrame to
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSize/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
     });
 &lt;/script&gt;
 </pre>
                     <p>On embedded page, include the folowing before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
 &lt;script&gt;
     iFrameAutoSize.resize();
 &lt;/script&gt;
@@ -86,12 +86,12 @@
                     <h2>Advanced Usage</h2>
                     <p>On parent page, include the following before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
         divID: "xxx",  // Id of dom element to add iFrame to
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSize/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js
         loaderUrl: "path/to/loader.gif" // Url of a loader GIF that should be shown (none shown by default)
         waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
         adjustWidth: false // A boolean indicating if the iFrame width should adjust too (defaults to false)
@@ -103,7 +103,7 @@
 </pre>
                     <p>On embedded page, include the folowing before the closing body tag:</p>
                     <pre class="prettyprint linenums">
-&lt;script src="//parentdomain.com/path/to/IFrameAutoSize/iFrameAutoSize.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- This can be pulled from the parent domain --&gt;
 &lt;script&gt;
     iFrameAutoSize.forceParentFrame({
         parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
