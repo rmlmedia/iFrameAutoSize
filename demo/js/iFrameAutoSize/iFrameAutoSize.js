@@ -111,7 +111,7 @@ var iFrameAutoSize = {
 					container.appendChild(iFrameAutoSize.loader);
 				}
 
-				// If wating for the window.onload event, add the binding
+				// If waiting for the window.onload event, add the binding
 				if (settings.waitForPageLoad) {
 					iFrameAutoSize.helpers.addDomEvent(window, 'load', createResizingIFrame);
 				} else {
@@ -161,9 +161,16 @@ var iFrameAutoSize = {
 		if (!settings.resizeHelperUrl) {
 			settings.resizeHelperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
 		}
+		// Get the url of the helper frame from a cookie if not already provided
+		if (!settings.resizeHelperUrl) {
+			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_helperUrl');
+		}
 
 		// Run this resize process if we have a URL for the helper frame
 		if (settings.resizeHelperUrl) {
+
+			// Store the url of the helper frame in a cookie (persists this url if the page within the frame changes)
+			iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
 
 			// Function to inject an iframe from the parent domain that calls a JS function in the parent domain (neatly gets around cross domain scripting issues)
 			function pipeDimensionsToParentIFrame()	{
@@ -272,10 +279,28 @@ var iFrameAutoSize = {
 			}
 		},
 
-		// Helper function, parse param from request string
+		// Cross browser function to get a session cookie
+		setCookie: function(key, value) {
+			document.cookie = key + "=" + escape(value);
+		},
+
+		// Cross browser function to get a session cookie
+		getCookie: function(key) {
+			key = key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); //escape the regular expression characters
+			var regexS = "(^|[;,\\s])" + key + "\\s?=\\s?([^;,\\s]*)";
+			var regex = new RegExp(regexS);
+			var results = regex.exec(document.cookie);
+			if (results == null) {
+				return "";
+			} else {
+				return unescape(results[2]);
+			}
+		},
+
+		// Cross browser function to get a query string parameter
 		getQueryStringParam: function(params, name) {
-			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-			var regexS = "[\\?&]"+name+"=([^&#]*)";
+			name = name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); //escape the regular expression characters
+			var regexS = "[\\?&]" + name + "=([^&#]*)";
 			var regex = new RegExp(regexS);
 			var results = regex.exec(params);
 			if (results == null) {

@@ -46,7 +46,7 @@
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
                 <h1>iFrameAutoSize.js</h1>
-                <p>This page is a demo of the iFrameAutoSize.js script which is used to create auto sizing iFrames, even if they are served from a different domains.</p>
+                <p>This page is a demo of the iFrameAutoSize.js script which is used to create auto sizing iFrames, even if they are served from a different domain. When the content inside the frame changes, the frame resizes</p>
                 <p>The frame below is loaded from another domain and iFrameAutoSize.js takes care of resizing the iFrame to fit the content:</p>
                 <div id="iFrame">
                     <!-- Auto Sizing iFrame to go here -->
@@ -115,7 +115,7 @@
         domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
         resizeOnLoadOnly: false, // Indicated if the resize should only occur on the initial page load (defaults to false)
         waitForPageLoad: true, // A boolean indicating if the code should wait for the window.onload event (defaults to true)
-        resizeHelperUrl: "//<strong>parentdomain.com</strong>/path/to/iFrameAutoSizeHelper.html" // This must be a link to the helper page provided with iFrameAutoSize.js <strong><u>served from the parent domain</u></strong>. If the iFrame uses redirects that drop query string parameters or contains links to other pages this will persist the resize behaviour (recommended)
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html" // Needed if the iFrame uses redirects that drop query string parameters. Must be a link to iFrameAutoSizeHelper.html <strong><u>on the parent domain</u></strong>
     });
 &lt;/script&gt;
 </pre>
