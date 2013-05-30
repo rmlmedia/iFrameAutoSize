@@ -98,7 +98,7 @@ var iFrameAutoSize = {
 						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.divId);
 						container.appendChild(iFrameAutoSize.iFrame);
 					}
-					iFrameAutoSize.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURI(settings.resizeHelperUrl) : ''));
+					iFrameAutoSize.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURIComponent(settings.resizeHelperUrl) : ''));
 				}
 
 				// Show the loader
@@ -136,7 +136,7 @@ var iFrameAutoSize = {
 		}
 		// If this page was accessed directly (i.e. it's not an iFrame), reload the page using the embed url
 		if (settings.parentUrl && window.self === window.top) {
-			window.location.href = settings.parentUrl + (settings.parentUrl.indexOf('?') == -1 ? '?' : '&') + 'frameUrl=' + encodeURI(window.location.href);
+			window.location.href = settings.parentUrl + (settings.parentUrl.indexOf('?') == -1 ? '?' : '&') + 'frameUrl=' + encodeURIComponent(window.location.href);
 		}
 	},
 
@@ -156,7 +156,7 @@ var iFrameAutoSize = {
 			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false)
 		}
 		// Get the url of the helper frame from the query string parameters
-		var helperUrl = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl');
+		var helperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
 
 		// Run this resize process if we have a URL for the helper frame
 		if (helperUrl) {
