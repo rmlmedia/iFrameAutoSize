@@ -145,21 +145,25 @@ var iFrameAutoSize = {
 	 * -------
 	 * Options:
 	 * -------
+	 * resizeHelperUrl: The url of the helper frame that passes the page dimensions back to the parent (must be served from the same domain as the parent)
 	 * domId: Will use this dom element to get sizings, can return better results cross browser to use a wrapper div. If element not found the body element will be used to determine the page size
 	 * resizeOnLoadOnly: This controls if the iFrame will keep sending messages to the parent to adjust the size. Defaults to false
 	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to true
 	 */
 	resize: function(options) {
 		var settings = {
+			resizeHelperUrl: (options && options.resizeHelperUrl ? options.resizeHelperUrl : ''),
 			domId: (options && options.domId ? options.domId : ''),
 			resizeOnLoadOnly: (options && options.resizeOnLoadOnly ? options.resizeOnLoadOnly : false),
 			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false)
 		}
-		// Get the url of the helper frame from the query string parameters
-		var helperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
+		// Get the url of the helper frame from the query string parameters if not already provided
+		if (!settings.resizeHelperUrl) {
+			settings.resizehelperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
+		}
 
 		// Run this resize process if we have a URL for the helper frame
-		if (helperUrl) {
+		if (settings.resizeHelperUrl) {
 
 			// Function to inject an iframe from the parent domain that calls a JS function in the parent domain (neatly gets around cross domain scripting issues)
 			function pipeDimensionsToParentIFrame()	{
@@ -185,7 +189,7 @@ var iFrameAutoSize = {
 					iFrameAutoSize.currWidth = pageDimensions.width;
 					iFrameAutoSize.currHeight = (iFrameAutoSize.frameLoaded ? pageDimensions.height : 0);
 					if (!iFrameAutoSize.sizeAdjusted) {
-						pipe.setAttribute('src', helperUrl + '?height=' + iFrameAutoSize.currHeight + '&width=' + iFrameAutoSize.currWidth + '&cacheb=' + Math.random());
+						pipe.setAttribute('src', settings.resizeHelperUrl + '?height=' + iFrameAutoSize.currHeight + '&width=' + iFrameAutoSize.currWidth + '&cacheb=' + Math.random());
 					}
 					if (!iFrameAutoSize.frameLoaded) {
 						iFrameAutoSize.frameLoaded = true;

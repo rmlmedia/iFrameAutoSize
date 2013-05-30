@@ -115,6 +115,7 @@
         domId: "xxx" // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
         resizeOnLoadOnly: false // Indicated if the resize should only occur on the initial page load (defaults to false)
         waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
+        resizeHelperUrl: "//<strong>parentdomain.com</strong>/path/to/iFrameAutoSizeHelper.html", // This must be a link to the helper page provided with iFrameAutoSize.js <strong><u>served from the parent domain</u></strong>. If the iFrame uses redirects that drop query string parameters or contains links to other pages this will persist the resize behaviour (recommended)
     });
 &lt;/script&gt;
 </pre>
