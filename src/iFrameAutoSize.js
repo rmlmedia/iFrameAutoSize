@@ -52,7 +52,7 @@ var iFrameAutoSize = {
 	 * -------
 	 * Options:
 	 * -------
-	 * id: The id of the DOM element to add the iFrame to
+	 * domId: The id of the DOM element to add the iFrame to
 	 * iFrameUrl: The src of the iFrame
 	 * resizeHelperUrl: The url of the helper frame that passes the page dimensions back to the parent (must be served from the same domain as the parent)
 	 * loaderUrl: A Url of a loader GIF that should be shown. Default to '' (no loader)
@@ -64,7 +64,7 @@ var iFrameAutoSize = {
 	 */
 	create: function(options) {
 		var settings = {
-			divId: (options && options.divId ? options.divId : ''),
+			domId: (options && options.domId ? options.domId : ''),
 			iFrameUrl: (options && options.iFrameUrl ? options.iFrameUrl : ''),
 			resizeHelperUrl: (options && options.resizeHelperUrl ? options.resizeHelperUrl : ''),
 			loaderUrl: (options && options.loaderUrl ? options.loaderUrl : ''),
@@ -76,13 +76,13 @@ var iFrameAutoSize = {
 		}
 
 		// Check we have been passed the required parameters
-		if (settings.divId && settings.iFrameUrl && settings.resizeHelperUrl) {
-			var container = document.getElementById(settings.divId);
+		if (settings.domId && settings.iFrameUrl && settings.resizeHelperUrl) {
+			var container = document.getElementById(settings.domId);
 			if (container) {
 
 				function createResizingIFrame() {
 					if (settings.adjustWidth) iFrameAutoSize.adjustWidth = settings.adjustWidth;
-					iFrameAutoSize.iFrame = document.getElementById('iFrameAutoSize-' + settings.divId);
+					iFrameAutoSize.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
 					if (!iFrameAutoSize.iFrame) {
 						iFrameAutoSize.iFrame = document.createElement('IFRAME');
 						iFrameAutoSize.iFrame.style.width = settings.initialWidth;
@@ -95,7 +95,7 @@ var iFrameAutoSize = {
 						iFrameAutoSize.iFrame.setAttribute('marginwidth', 0);
 						iFrameAutoSize.iFrame.setAttribute('marginheight', 0);
 						iFrameAutoSize.iFrame.setAttribute('scrolling', 'no');
-						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.divId);
+						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.domId);
 						container.appendChild(iFrameAutoSize.iFrame);
 					}
 					iFrameAutoSize.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURIComponent(settings.resizeHelperUrl) : ''));

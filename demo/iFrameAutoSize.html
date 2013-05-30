@@ -69,7 +69,7 @@
 &lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
-        divID: "xxx",  // Id of dom element to add iFrame to (required)
+        domId: "xxx",  // Id of dom element to add iFrame to (required)
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame (required)
         resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js (required)
     });
@@ -92,7 +92,7 @@
 &lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
-        divID: "xxx",  // Id of dom element to add iFrame to (required)
+        domId: "xxx",  // Id of dom element to add iFrame to (required)
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame (required)
         resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js (required)
         loaderUrl: "path/to/loader.gif" // Url of a loader GIF that should be shown (none shown by default)
@@ -160,7 +160,7 @@
         <script type="text/javascript" src="js/iFrameAutoSize/iFrameAutoSize.js"></script>
         <script>
             iFrameAutoSize.create({
-                divId: "iFrame",
+                domId: "iFrame",
                 iFrameUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts2.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "iFrameAutoSizeDemo.html",
                 resizeHelperUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/iFrameAutoSizeHelper.html",
                 loaderUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/loader.gif"
