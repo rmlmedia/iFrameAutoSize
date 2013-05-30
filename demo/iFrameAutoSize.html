@@ -71,7 +71,7 @@
     iFrameAutoSize.create({
         domId: "xxx",  // Id of dom element to add iFrame to (required)
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame (required)
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js (required)
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html" // This is provided with iFrameResize.js (required)
     });
 &lt;/script&gt;
 </pre>
@@ -95,11 +95,11 @@
         domId: "xxx",  // Id of dom element to add iFrame to (required)
         iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame (required)
         resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html", // This is provided with iFrameResize.js (required)
-        loaderUrl: "path/to/loader.gif" // Url of a loader GIF that should be shown (none shown by default)
-        waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
-        adjustWidth: false // A boolean indicating if the iFrame width should adjust too (defaults to false)
-        initialWidth: '100%' // The initial width of the iFrame (defaults to 100%)
-        initialHeight: '0px' // The initial height of the iFrame (defaults to 0px)
+        loaderUrl: "path/to/loader.gif", // Url of a loader GIF that should be shown (none shown by default)
+        waitForPageLoad: true, // A boolean indicating if the code should wait for the window.onload event (defaults to true)
+        adjustWidth: false, // A boolean indicating if the iFrame width should adjust too (defaults to false)
+        initialWidth: '100%', // The initial width of the iFrame (defaults to 100%)
+        initialHeight: '0px', // The initial height of the iFrame (defaults to 0px)
         additionalCSS: '' // Extra CSS to set on the iFrame
     });
 &lt;/script&gt;
@@ -112,10 +112,10 @@
         parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
     });
     iFrameAutoSize.resize({
-        domId: "xxx" // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
-        resizeOnLoadOnly: false // Indicated if the resize should only occur on the initial page load (defaults to false)
-        waitForPageLoad: true // A boolean indicating if the code should wait for the window.onload event (defaults to true)
-        resizeHelperUrl: "//<strong>parentdomain.com</strong>/path/to/iFrameAutoSizeHelper.html", // This must be a link to the helper page provided with iFrameAutoSize.js <strong><u>served from the parent domain</u></strong>. If the iFrame uses redirects that drop query string parameters or contains links to other pages this will persist the resize behaviour (recommended)
+        domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to inspecting document height)
+        resizeOnLoadOnly: false, // Indicated if the resize should only occur on the initial page load (defaults to false)
+        waitForPageLoad: true, // A boolean indicating if the code should wait for the window.onload event (defaults to true)
+        resizeHelperUrl: "//<strong>parentdomain.com</strong>/path/to/iFrameAutoSizeHelper.html" // This must be a link to the helper page provided with iFrameAutoSize.js <strong><u>served from the parent domain</u></strong>. If the iFrame uses redirects that drop query string parameters or contains links to other pages this will persist the resize behaviour (recommended)
     });
 &lt;/script&gt;
 </pre>

@@ -159,7 +159,7 @@ var iFrameAutoSize = {
 		}
 		// Get the url of the helper frame from the query string parameters if not already provided
 		if (!settings.resizeHelperUrl) {
-			settings.resizehelperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
+			settings.resizeHelperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
 		}
 
 		// Run this resize process if we have a URL for the helper frame
