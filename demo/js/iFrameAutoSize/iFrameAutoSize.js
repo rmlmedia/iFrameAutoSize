@@ -149,20 +149,22 @@ var iFrameAutoSize = {
 	 * domId: Will use this dom element to get sizings, can return better results cross browser to use a wrapper div. If element not found the body element will be used to determine the page size
 	 * resizeOnLoadOnly: This controls if the iFrame will keep sending messages to the parent to adjust the size. Defaults to false
 	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to true
+	 * useCookie: A boolean indicating if the resize helper URL should be stored in a cookie. Defaults to true
 	 */
 	resize: function(options) {
 		var settings = {
 			resizeHelperUrl: (options && options.resizeHelperUrl ? options.resizeHelperUrl : ''),
 			domId: (options && options.domId ? options.domId : ''),
 			resizeOnLoadOnly: (options && options.resizeOnLoadOnly ? options.resizeOnLoadOnly : false),
-			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false)
+			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false),
+			useCookie: (options && options.useCookie ? options.useCookie : true)
 		}
 		// Get the url of the helper frame from the query string parameters if not already provided
 		if (!settings.resizeHelperUrl) {
 			settings.resizeHelperUrl = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'helperUrl'));
 		}
 		// Get the url of the helper frame from a cookie if not already provided
-		if (!settings.resizeHelperUrl) {
+		if (settings.useCookie && !settings.resizeHelperUrl) {
 			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_helperUrl');
 		}
 
@@ -170,7 +172,7 @@ var iFrameAutoSize = {
 		if (settings.resizeHelperUrl) {
 
 			// Store the url of the helper frame in a cookie (persists this url if the page within the frame changes)
-			iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
+			if (settings.useCookie) iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
 
 			// Function to inject an iframe from the parent domain that calls a JS function in the parent domain (neatly gets around cross domain scripting issues)
 			function pipeDimensionsToParentIFrame()	{
