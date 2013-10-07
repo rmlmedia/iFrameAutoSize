@@ -7,7 +7,7 @@
  * Usage: http://scripts.deependmelbourne.com.au/iFrameAutoSize.html
  * 
  * Author: Rick Lannan, Deepend
- * Version: 1.0 
+ * Version: 1.1 
  * References: http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
  * Copyright (C): Rick Lannan, 2013 
  * Distibution & Modification: GNU License, please give credit
@@ -46,6 +46,7 @@ var iFrameAutoSize = {
 	currWidth: 0,
 	sizeAdjusted: false,
 	frameLoaded: false,
+	onResize: null,
 
 	/* This function should be called from the parent page to construct the auto sizing iFrame
 	 *
@@ -61,6 +62,7 @@ var iFrameAutoSize = {
 	 * initialWidth: The initial width of the iFrame. Defaults to 100%
 	 * initialHeight: The initial height of the iFrame. Defaults to 0px
 	 * additionalCSS: Extra CSS to set on the iFrame
+	 * onResize: Function to run when iFrame resized
 	 */
 	create: function(options) {
 		var settings = {
@@ -72,7 +74,8 @@ var iFrameAutoSize = {
 			adjustWidth: (options && options.adjustWidth ? options.adjustWidth : false),
 			initialWidth: (options && options.initialWidth ? options.initialWidth : '100%'),
 			initialHeight: (options && options.initialHeight ? options.initialHeight : '0px'),
-			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : '')
+			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : ''),
+			onResize: (options && options.onResize ? options.onResize : null)
 		}
 
 		// Check we have been passed the required parameters
@@ -83,6 +86,7 @@ var iFrameAutoSize = {
 				function createResizingIFrame() {
 					if (settings.adjustWidth) iFrameAutoSize.adjustWidth = settings.adjustWidth;
 					iFrameAutoSize.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
+					if (settings.onResize) iFrameAutoSize.onResize = settings.onResize;
 					if (!iFrameAutoSize.iFrame) {
 						iFrameAutoSize.iFrame = document.createElement('IFRAME');
 						iFrameAutoSize.iFrame.style.width = settings.initialWidth;
@@ -232,6 +236,10 @@ var iFrameAutoSize = {
 					iFrameAutoSize.iFrame.style.width = parseInt(width) + 'px';
 				} else {
 					iFrameAutoSize.iFrame.style.width = '100%';
+				}
+				// Call the on resize function if it is defined
+				if (typeof(iFrameAutoSize.onResize) == "function") {
+					iFrameAutoSize.onResize.apply(iFrameAutoSize.iFrame);
 				}
 			}
 			if (iFrameAutoSize.loader && height > 1) {
