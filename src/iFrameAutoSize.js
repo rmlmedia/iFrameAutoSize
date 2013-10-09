@@ -55,7 +55,7 @@ var iFrameAutoSize = {
 	 * -------
 	 * domId: The id of the DOM element to add the iFrame to
 	 * iFrameUrl: The src of the iFrame
-	 * resizeHelperUrl: The url of the helper frame that passes the page dimensions back to the parent (must be served from the same domain as the parent)
+	 * resizeHelperUrl: A relative path of the helper frame that passes the page dimensions back to the parent (must be served from the parent domain)
 	 * loaderUrl: A Url of a loader GIF that should be shown. Default to '' (no loader)
 	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to false
 	 * adjustWidth: A boolean indicating if the iFrame width should adjust. Defaults to false
@@ -80,6 +80,11 @@ var iFrameAutoSize = {
 
 		// Check we have been passed the required parameters
 		if (settings.domId && settings.iFrameUrl && settings.resizeHelperUrl) {
+
+			// convert the resizeHelperUrl from a relative path to an absolute path
+			if (settings.resizeHelperUrl.indexOf('/') != 0) settings.resizeHelperUrl = "/" + settings.resizeHelperUrl;
+			settings.resizeHelperUrl = window.location.href.replace(/\/[^\/]*$/, "") + settings.resizeHelperUrl;
+
 			var container = document.getElementById(settings.domId);
 			if (container) {
 
