@@ -82,7 +82,10 @@ var iFrameAutoSize = {
 		if (settings.domId && settings.iFrameUrl && settings.resizeHelperUrl) {
 
 			// Change the protocol of resizeHelperUrl if it doesn't match the page
-			settings.resizeHelperUrl.replace(/^(https?)?\/\//i, window.location.protocol + "//");
+			settings.resizeHelperUrl = settings.resizeHelperUrl.replace(/^(https?:)?\/\//i, window.location.protocol + "//");
+			// Convert from a relative url to an abolute
+			if (settings.resizeHelperUrl.indexOf("/") == 0) settings.resizeHelperUrl = window.location.protocol + "//" + window.location.host + settings.resizeHelperUrl;
+			if (settings.resizeHelperUrl.indexOf("http") != 0) settings.resizeHelperUrl = window.location.href.replace(/[^\/]*$/, "") + settings.resizeHelperUrl;
 
 			var container = document.getElementById(settings.domId);
 			if (container) {
