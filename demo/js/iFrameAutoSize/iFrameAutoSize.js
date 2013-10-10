@@ -39,14 +39,7 @@
  */
 
 var iFrameAutoSize = {
-	iFrame: null,
-	loader: null,
-	adjustWidth: false,
-	currHeight: 0,
-	currWidth: 0,
-	sizeAdjusted: false,
-	frameLoaded: false,
-	onResize: null,
+	iFrameSettings: null,
 
 	/* This function should be called from the parent page to construct the auto sizing iFrame
 	 *
@@ -90,36 +83,47 @@ var iFrameAutoSize = {
 			var container = document.getElementById(settings.domId);
 			if (container) {
 
+				//Create the settings for this iFrame
+				if (!iFrameAutoSize.iFrameSettings) iFrameAutoSize.iFrameSettings = new Array();
+				iFrameAutoSize.iFrameSettings[settings.domId] = {
+					iFrame: null,
+					loader: null,
+					adjustWidth: false,
+					onResize: null
+				}
+				var iFrameSettings = iFrameAutoSize.iFrameSettings[settings.domId];
+
 				function createResizingIFrame() {
-					if (settings.adjustWidth) iFrameAutoSize.adjustWidth = settings.adjustWidth;
-					iFrameAutoSize.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
-					if (settings.onResize) iFrameAutoSize.onResize = settings.onResize;
-					if (!iFrameAutoSize.iFrame) {
-						iFrameAutoSize.iFrame = document.createElement('IFRAME');
-						iFrameAutoSize.iFrame.style.width = settings.initialWidth;
-						iFrameAutoSize.iFrame.style.height = settings.initialHeight;
-						iFrameAutoSize.iFrame.style.border = 0;
-						iFrameAutoSize.iFrame.setAttribute('frameborder', 0);
-						iFrameAutoSize.iFrame.setAttribute('frameBorder', 0);  // IE7 hack
-						iFrameAutoSize.iFrame.setAttribute('border', 0);
-						iFrameAutoSize.iFrame.setAttribute('cellspacing', 0);
-						iFrameAutoSize.iFrame.setAttribute('marginwidth', 0);
-						iFrameAutoSize.iFrame.setAttribute('marginheight', 0);
-						iFrameAutoSize.iFrame.setAttribute('scrolling', 'no');
-						iFrameAutoSize.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.domId);
-						container.appendChild(iFrameAutoSize.iFrame);
+					if (settings.adjustWidth) iFrameSettings.adjustWidth = settings.adjustWidth;
+					iFrameSettings.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
+					if (settings.onResize) iFrameSettings.onResize = settings.onResize;
+					if (!iFrameSettings.iFrame) {
+						iFrameSettings.iFrame = document.createElement('IFRAME');
+						iFrameSettings.iFrame.style.width = settings.initialWidth;
+						iFrameSettings.iFrame.style.height = settings.initialHeight;
+						iFrameSettings.iFrame.style.border = 0;
+						iFrameSettings.iFrame.setAttribute('frameborder', 0);
+						iFrameSettings.iFrame.setAttribute('frameBorder', 0);  // IE7 hack
+						iFrameSettings.iFrame.setAttribute('border', 0);
+						iFrameSettings.iFrame.setAttribute('cellspacing', 0);
+						iFrameSettings.iFrame.setAttribute('marginwidth', 0);
+						iFrameSettings.iFrame.setAttribute('marginheight', 0);
+						iFrameSettings.iFrame.setAttribute('scrolling', 'no');
+						iFrameSettings.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.domId);
+						container.appendChild(iFrameSettings.iFrame);
 					}
-					iFrameAutoSize.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURIComponent(settings.resizeHelperUrl) : ''));
+					iFrameSettings.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURIComponent(settings.resizeHelperUrl) : '') + '&parentDomId=' + settings.domId);
 				}
 
 				// Show the loader
 				if (settings.loaderUrl) {
-					iFrameAutoSize.loader = document.createElement('IMG');
-					iFrameAutoSize.loader.setAttribute('src', settings.loaderUrl);
-					iFrameAutoSize.loader.style.display = 'block';
-					iFrameAutoSize.loader.style.margin = '0 auto';
-					iFrameAutoSize.loader.setAttribute('id', 'iFrameAutoSize-loader');
-					container.appendChild(iFrameAutoSize.loader);
+					iFrameSettings.loader = document.createElement('IMG');
+					iFrameSettings.loader.setAttribute('src', settings.loaderUrl);
+					iFrameSettings.loader.style.display = 'block';
+					iFrameSettings.loader.style.margin = '0 auto';
+					iFrameSettings.loader.setAttribute('id', 'iFrameAutoSize-' + settings.domId + '-loader');
+					iFrameSettings.loader.setAttribute('class', 'iFrameAutoSize-loader');
+					container.appendChild(iFrameSettings.loader);
 				}
 
 				// If waiting for the window.onload event, add the binding
@@ -158,6 +162,7 @@ var iFrameAutoSize = {
 	 * -------
 	 * resizeHelperUrl: The url of the helper frame that passes the page dimensions back to the parent (must be served from the same domain as the parent)
 	 * domId: Will use this dom element to get sizings, can return better results cross browser to use a wrapper div. If element not found the body element will be used to determine the page size
+	 * parentDomId: The id of the dom element comtaining the iFrame on the parent page
 	 * resizeOnLoadOnly: This controls if the iFrame will keep sending messages to the parent to adjust the size. Defaults to false
 	 * waitForPageLoad: A boolean indicating if we should bind to the window.onload event, or run the resize code straight away. Defaults to true
 	 * useCookie: A boolean indicating if the resize helper URL should be stored in a cookie. Defaults to true
@@ -166,6 +171,7 @@ var iFrameAutoSize = {
 		var settings = {
 			resizeHelperUrl: (options && options.resizeHelperUrl ? options.resizeHelperUrl : ''),
 			domId: (options && options.domId ? options.domId : ''),
+			parentDomId: (options && options.parentDomId ? options.parentDomId : ''),
 			resizeOnLoadOnly: (options && options.resizeOnLoadOnly ? options.resizeOnLoadOnly : false),
 			waitForPageLoad: (options && options.waitForPageLoad ? options.waitForPageLoad : false),
 			useCookie: (options && options.useCookie ? options.useCookie : true)
@@ -179,11 +185,23 @@ var iFrameAutoSize = {
 			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_helperUrl');
 		}
 
-		// Run this resize process if we have a URL for the helper frame
-		if (settings.resizeHelperUrl) {
+		// Get the id of the dom element containing the iFrame on the parent page from the query string parameters if not already provided
+		if (!settings.parentDomId) {
+			settings.parentDomId = decodeURIComponent(iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'parentDomId'));
+		}
+		// Get the id of the dom element containing the iFrame on the parent page from a cookie if not already provided
+		if (settings.useCookie && !settings.parentDomId) {
+			settings.parentDomId = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_parentDomId');
+		}
 
-			// Store the url of the helper frame in a cookie (persists this url if the page within the frame changes)
-			if (settings.useCookie) iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
+		// Run this resize process if we have a URL for the helper frame and an ID for the dom element on the parent page
+		if (settings.resizeHelperUrl && settings.parentDomId) {
+
+			// Store the url of the helper frame and parent dom id in a cookie (persists the settings if the page within the frame changes)
+			if (settings.useCookie) {
+				iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
+				iFrameAutoSize.helpers.setCookie('iFrameAutoSize_parentDomId', settings.parentDomId);
+			}
 
 			// Function to inject an iframe from the parent domain that calls a JS function in the parent domain (neatly gets around cross domain scripting issues)
 			function pipeDimensionsToParentIFrame()	{
@@ -205,23 +223,32 @@ var iFrameAutoSize = {
 					document.body.appendChild(pipe);
 				}
 
-				if (pageDimensions.height != iFrameAutoSize.currHeight || pageDimensions.width != iFrameAutoSize.currWidth) {
-					iFrameAutoSize.currWidth = pageDimensions.width;
-					iFrameAutoSize.currHeight = (iFrameAutoSize.frameLoaded ? pageDimensions.height : 0);
-					if (!iFrameAutoSize.sizeAdjusted) {
-						pipe.setAttribute('src', settings.resizeHelperUrl + '?height=' + iFrameAutoSize.currHeight + '&width=' + iFrameAutoSize.currWidth + '&cacheb=' + Math.random());
+				if (!iFrameAutoSize.iFrameSettings) {
+					iFrameAutoSize.iFrameSettings = {
+						currHeight: 0,
+						currWidth: 0,
+						sizeAdjusted: false,
+						frameLoaded: false
 					}
-					if (!iFrameAutoSize.frameLoaded) {
-						iFrameAutoSize.frameLoaded = true;
+				}
+				var iFrameSettings = iFrameAutoSize.iFrameSettings;
+				if (pageDimensions.height != iFrameSettings.currHeight || pageDimensions.width != iFrameSettings.currWidth) {
+					iFrameSettings.currWidth = pageDimensions.width;
+					iFrameSettings.currHeight = (iFrameSettings.frameLoaded ? pageDimensions.height : 0);
+					if (!iFrameSettings.sizeAdjusted) {
+						pipe.setAttribute('src', settings.resizeHelperUrl + '?domId=' + settings.parentDomId + '&height=' + iFrameSettings.currHeight + '&width=' + iFrameSettings.currWidth + '&cacheb=' + Math.random());
+					}
+					if (!iFrameSettings.frameLoaded) {
+						iFrameSettings.frameLoaded = true;
 					} else {
-						iFrameAutoSize.sizeAdjusted = true;
+						iFrameSettings.sizeAdjusted = true;
 					}
 				} else {
-					iFrameAutoSize.sizeAdjusted = false;
+					iFrameSettings.sizeAdjusted = false;
 				}
 
 				// Set a timeout to continually adjust the page size
-				if (!settings.resizeOnLoadOnly || !iFrameAutoSize.frameLoaded) setTimeout(pipeDimensionsToParentIFrame, 100);
+				if (!settings.resizeOnLoadOnly || !iFrameSettings.frameLoaded) setTimeout(pipeDimensionsToParentIFrame, 100);
 			}
 
 			// If wating for the window.onload event, add the binding
@@ -236,21 +263,22 @@ var iFrameAutoSize = {
 
 	helpers: {
 		// Private function called from the iFrameAutoSizeHelper.html to resize the iframe to fit the page contained within
-		resizeIFrame: function(width, height) {
-			if (iFrameAutoSize.iFrame) {
-				iFrameAutoSize.iFrame.style.height = parseInt(height) + 'px';
-				if (iFrameAutoSize.adjustWidth) {
-					iFrameAutoSize.iFrame.style.width = parseInt(width) + 'px';
+		resizeIFrame: function(domId, width, height) {
+			var iFrameSettings = iFrameAutoSize.iFrameSettings[domId];
+			if (iFrameSettings && iFrameSettings.iFrame) {
+				iFrameSettings.iFrame.style.height = parseInt(height) + 'px';
+				if (iFrameSettings.adjustWidth) {
+					iFrameSettings.iFrame.style.width = parseInt(width) + 'px';
 				} else {
-					iFrameAutoSize.iFrame.style.width = '100%';
+					iFrameSettings.iFrame.style.width = '100%';
 				}
 				// Call the on resize function if it is defined
-				if (typeof(iFrameAutoSize.onResize) == "function") {
-					iFrameAutoSize.onResize.apply(iFrameAutoSize.iFrame);
+				if (typeof(iFrameSettings.onResize) == "function") {
+					iFrameSettings.onResize.apply(iFrameSettings.iFrame);
 				}
-			}
-			if (iFrameAutoSize.loader && height > 1) {
-				iFrameAutoSize.loader.style.display = 'none';
+				if (iFrameSettings.loader && height > 1) {
+					iFrameSettings.loader.style.display = 'none';
+				}
 			}
 		},
 

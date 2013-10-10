@@ -1,40 +1,56 @@
 <!DOCTYPE html>
 <html>
-	<style>
-		body, html {
-			margin: 0;
-			padding: 0;
-		}
-		#container {
-			padding: 4px;
-			background-color: #999;
-			overflow: hidden; /*to contain floats*/
-		}
-		img {
-			float: left; 
-			width: 100%;
-		}
-		a {
-			position: absolute;
-			left: 14px;
-			right: 14px;
-			top: 14px;
-			height: 25px;
-			background: #000;
-			padding: 10px;
-			font-family: Arial;
-			color: #fff;
-			text-align: center;
-			opacity: 0.8;
-			text-decoration: none;
-		}
-	</style>
+	<head>
+		<style>
+			body, html {
+				margin: 0;
+				padding: 0;
+			}
+			#container {
+				font-family: Arial;
+				padding: 56px 10px 10px;
+				border: solid 4px #999;
+				background-color: #fff;
+				overflow: hidden; /*to contain floats*/
+			}
+			img {
+				float: left; 
+				width: 100%;
+			}
+			a {
+				position: absolute;
+				left: 14px;
+				right: 14px;
+				top: 14px;
+				height: 25px;
+				background: #000;
+				padding: 10px;
+				color: #fff;
+				text-align: center;
+				opacity: 0.8;
+				text-decoration: none;
+			}
+			p {
+				font-size: 0.7em;
+				font-style: italic;
+			}
+		</style>
+		<script type="text/javascript">
+			function addParagraph() {
+				var p = document.getElementsByTagName("p");
+				var newP = p[0].cloneNode(true);
+				document.getElementById("container").appendChild(newP);
+			}
+		</script>
+	</head>
 	<body>
 		<div id="container">
-			<img src="img/success.jpg" alt="Success" />
-			<a href="iFrameAutoSizeDemo.html" onclick="">Success, iFrames now look like they're part of your site without nasty scrollbars. Pump your fists in the air like you just don't care!</a>
+			<a href="#" onclick="addParagraph()">Click here to add a paragraph and watch the frame change size automatically</a>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non ornare sapien. Nunc interdum nibh vel arcu posuere, quis suscipit urna suscipit. In sodales accumsan suscipit. Phasellus at ornare risus, vel lacinia arcu. Nulla iaculis accumsan velit ac dapibus. Aliquam erat volutpat. Proin magna purus, ornare eu risus sit amet, venenatis egestas nulla. Pellentesque vel ligula dolor. Ut lacinia tincidunt vestibulum. Phasellus tempus hendrerit ante, in gravida erat volutpat eu. Proin faucibus dictum placerat. Morbi tempor dignissim nunc, sed vestibulum lorem ultrices eu. Vestibulum at euismod lacus, pretium sollicitudin sem. Sed metus mauris, ornare vitae varius eget, pretium a risus. Sed mollis nibh nulla, eu ultricies nunc egestas non. Etiam id dictum nisi.
+			</p>
 		</div>
-		<script src="https://scripts2.deependmelbourne.com.au/js/iFrameAutoSize/iFrameAutoSize.js"></script>
+		<script src="js/iFrameAutoSize/iFrameAutoSize.js"></script>
 		<script> 
 			iFrameAutoSize.forceParentFrame({ parentUrl: "//scripts.deependmelbourne.com.au/" });
 			iFrameAutoSize.resize({

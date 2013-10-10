@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		body, html {
+			margin: 0;
+			padding: 0;
+		}
+		#container {
+			padding: 4px;
+			background-color: #999;
+			overflow: hidden; /*to contain floats*/
+		}
+		img {
+			float: left; 
+			width: 100%;
+		}
+		a {
+			position: absolute;
+			left: 14px;
+			right: 14px;
+			top: 14px;
+			height: 25px;
+			background: #000;
+			padding: 10px;
+			font-family: Arial;
+			color: #fff;
+			text-align: center;
+			opacity: 0.8;
+			text-decoration: none;
+		}
+	</style>
+	<body>
+		<div id="container">
+			<img src="img/inception.jpg" alt="Inception - a frame within a frame" />
+			<a href="iFrameAutoSizeDemo1a.html" onclick="">Click here to visit another page and watch the frame change size to fit the new content</a>
+		</div>
+		<script src="js/iFrameAutoSize/iFrameAutoSize.js"></script>
+		<script> 
+			iFrameAutoSize.forceParentFrame({ parentUrl: "//scripts.deependmelbourne.com.au/" });
+			iFrameAutoSize.resize({
+				domId: 'container'
+			});
+		</script>
+	</body>
+</html>
