@@ -55,6 +55,7 @@ var iFrameAutoSize = {
 	 * initialWidth: The initial width of the iFrame. Defaults to 100%
 	 * initialHeight: The initial height of the iFrame. Defaults to 0px
 	 * additionalCSS: Extra CSS to set on the iFrame
+	 * loaderCSS: Extra CSS to set on the loader image. Defaults to 'display: block; margin: 0 auto'
 	 * onResize: Function to run when iFrame resized
 	 */
 	create: function(options) {
@@ -68,6 +69,7 @@ var iFrameAutoSize = {
 			initialWidth: (options && options.initialWidth ? options.initialWidth : '100%'),
 			initialHeight: (options && options.initialHeight ? options.initialHeight : '0px'),
 			additionalCSS: (options && options.additionalCSS ? options.additionalCSS : ''),
+			loaderCSS: (options && options.loaderCSS ? options.loaderCSS : ''),
 			onResize: (options && options.onResize ? options.onResize : null)
 		}
 
@@ -98,10 +100,11 @@ var iFrameAutoSize = {
 					iFrameSettings.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
 					if (settings.onResize) iFrameSettings.onResize = settings.onResize;
 					if (!iFrameSettings.iFrame) {
+						var style = "border: 0; " + settings.additionalCSS;
+						if (!style.match(/;\s*$/)) style += "; ";
+						style += "width: " + settings.initialWidth + "px; height: " + settings.initialHeight + "px";
 						iFrameSettings.iFrame = document.createElement('IFRAME');
-						iFrameSettings.iFrame.style.width = settings.initialWidth;
-						iFrameSettings.iFrame.style.height = settings.initialHeight;
-						iFrameSettings.iFrame.style.border = 0;
+						iFrameSettings.iFrame.setAttribute('style', style);
 						iFrameSettings.iFrame.setAttribute('frameborder', 0);
 						iFrameSettings.iFrame.setAttribute('frameBorder', 0);  // IE7 hack
 						iFrameSettings.iFrame.setAttribute('border', 0);
@@ -110,6 +113,7 @@ var iFrameAutoSize = {
 						iFrameSettings.iFrame.setAttribute('marginheight', 0);
 						iFrameSettings.iFrame.setAttribute('scrolling', 'no');
 						iFrameSettings.iFrame.setAttribute('id', 'iFrameAutoSize-' + settings.domId);
+						iFrameSettings.iFrame.setAttribute('class', 'iFrameAutoSize-iFrame');
 						container.appendChild(iFrameSettings.iFrame);
 					}
 					iFrameSettings.iFrame.setAttribute('src', settings.iFrameUrl + (settings.iFrameUrl.indexOf('?') == -1 ? '?' : '&') + (settings.resizeHelperUrl ? 'helperUrl=' + encodeURIComponent(settings.resizeHelperUrl) : '') + '&parentDomId=' + settings.domId);
@@ -117,10 +121,10 @@ var iFrameAutoSize = {
 
 				// Show the loader
 				if (settings.loaderUrl) {
+					var style = "display: block; margin: 0 auto; " + settings.loaderCSS;
 					iFrameSettings.loader = document.createElement('IMG');
 					iFrameSettings.loader.setAttribute('src', settings.loaderUrl);
-					iFrameSettings.loader.style.display = 'block';
-					iFrameSettings.loader.style.margin = '0 auto';
+					iFrameSettings.loader.setAttribute('style', style);
 					iFrameSettings.loader.setAttribute('id', 'iFrameAutoSize-' + settings.domId + '-loader');
 					iFrameSettings.loader.setAttribute('class', 'iFrameAutoSize-loader');
 					container.appendChild(iFrameSettings.loader);

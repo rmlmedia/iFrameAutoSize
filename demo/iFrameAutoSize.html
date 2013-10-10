@@ -99,7 +99,9 @@
                         <pre class="prettyprint linenums">
 &lt;script src="//iframedomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must be the same as the script reference on the parent domain</strong></u> --&gt;
 &lt;script&gt;
-    iFrameAutoSize.resize();
+    iFrameAutoSize.resize({
+        domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to document height)
+    });
 &lt;/script&gt;
 </pre>
                     </div>
@@ -199,13 +201,15 @@
                 domId: "example-1",
                 iFrameUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts2.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "iFrameAutoSizeDemo1.html",
                 resizeHelperUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/iFrameAutoSizeHelper.html",
-                loaderUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/loader.gif"
+                loaderUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/loader.gif",
+                loaderCSS: 'margin: 10px auto'
             });
             iFrameAutoSize.create({
                 domId: "example-2",
                 iFrameUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts2.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "iFrameAutoSizeDemo2.html",
                 resizeHelperUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/iFrameAutoSizeHelper.html",
-                loaderUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/loader.gif"
+                loaderUrl: (window.location.host ? (window.location.host == "scripts.deependmelbourne.com.au" ? "//scripts.deependmelbourne.com.au/" : "//" + window.location.host + "/") : "") + "js/iFrameAutoSize/loader.gif",
+                loaderCSS: 'margin: 10px auto'
             });
         </script>
 
