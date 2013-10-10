@@ -100,11 +100,11 @@ var iFrameAutoSize = {
 					iFrameSettings.iFrame = document.getElementById('iFrameAutoSize-' + settings.domId);
 					if (settings.onResize) iFrameSettings.onResize = settings.onResize;
 					if (!iFrameSettings.iFrame) {
-						var style = "border: 0; " + settings.additionalCSS;
-						if (!style.match(/;\s*$/)) style += "; ";
-						style += "width: " + settings.initialWidth + "px; height: " + settings.initialHeight + "px";
 						iFrameSettings.iFrame = document.createElement('IFRAME');
-						iFrameSettings.iFrame.setAttribute('style', style);
+						iFrameSettings.iFrame.setAttribute('style', settings.additionalCSS);
+						iFrameSettings.iFrame.style.width = settings.initialWidth;
+						iFrameSettings.iFrame.style.height = settings.initialHeight;
+						iFrameSettings.iFrame.style.border = 0;
 						iFrameSettings.iFrame.setAttribute('frameborder', 0);
 						iFrameSettings.iFrame.setAttribute('frameBorder', 0);  // IE7 hack
 						iFrameSettings.iFrame.setAttribute('border', 0);
@@ -121,10 +121,9 @@ var iFrameAutoSize = {
 
 				// Show the loader
 				if (settings.loaderUrl) {
-					var style = "display: block; margin: 0 auto; " + settings.loaderCSS;
 					iFrameSettings.loader = document.createElement('IMG');
 					iFrameSettings.loader.setAttribute('src', settings.loaderUrl);
-					iFrameSettings.loader.setAttribute('style', style);
+					iFrameSettings.loader.setAttribute('style', "display: block; margin: 0 auto; " + settings.loaderCSS);
 					iFrameSettings.loader.setAttribute('id', 'iFrameAutoSize-' + settings.domId + '-loader');
 					iFrameSettings.loader.setAttribute('class', 'iFrameAutoSize-loader');
 					container.appendChild(iFrameSettings.loader);
