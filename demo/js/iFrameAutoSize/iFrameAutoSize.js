@@ -211,7 +211,14 @@ var iFrameAutoSize = {
 				// Get the page height and width
 				var pageDimensions = iFrameAutoSize.helpers.getPageDimensions();
 				if (settings.domId) {
-					pageDimensions = iFrameAutoSize.helpers.getDimensions(settings.domId);
+					pageDimensions = iFrameAutoSize.helpers.getDimensions(document.getElementById(settings.domId));
+				} else {
+					var wrapperDiv = document.getElementsByTagName('div')[0];
+					if (wrapperDiv) {
+						var tempDimensions = iFrameAutoSize.helpers.getDimensions(wrapperDiv);
+						if (tempDimensions.height > pageDimensions.height) pageDimensions.height = tempDimensions.height;
+						if (tempDimensions.width > pageDimensions.width) pageDimensions.width = tempDimensions.width;
+					}					
 				}
 
 				// 'Pipe' the page dimensions to the parent through the injected helper frame (which is on the same domain as the parent)
@@ -315,12 +322,11 @@ var iFrameAutoSize = {
 		},
 
 		// Cross browser function to get the dimensions of a DOM element
-		getDimensions: function(domId) {
-			var e = document.getElementById(domId);
-			if (e) {
+		getDimensions: function(domElem) {
+			if (domElem) {
 				return {
-					width: Math.max(Math.max(e.scrollWidth, e.offsetWidth), e.clientWidth),
-					height: Math.max(Math.max(e.scrollHeight, e.offsetHeight), e.clientHeight)
+					width: Math.max(Math.max(domElem.scrollWidth, domElem.offsetWidth), domElem.clientWidth),
+					height: Math.max(Math.max(domElem.scrollHeight, domElem.offsetHeight), domElem.clientHeight)
 				}
 			} else {
 				return getPageDimensions();
