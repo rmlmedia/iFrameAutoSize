@@ -185,7 +185,7 @@ var iFrameAutoSize = {
 		}
 		// Get the url of the helper frame from a cookie if not already provided
 		if (settings.useCookie && !settings.resizeHelperUrl) {
-			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_helperUrl');
+			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookieWithFrameUrlKey('iFrameAutoSize_helperUrl');
 		}
 
 		// Get the id of the dom element containing the iFrame on the parent page from the query string parameters if not already provided
@@ -194,7 +194,7 @@ var iFrameAutoSize = {
 		}
 		// Get the id of the dom element containing the iFrame on the parent page from a cookie if not already provided
 		if (settings.useCookie && !settings.parentDomId) {
-			settings.parentDomId = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_parentDomId');
+			settings.parentDomId = iFrameAutoSize.helpers.getCookieWithFrameUrlKey('iFrameAutoSize_parentDomId');
 		}
 
 		// Run this resize process if we have a URL for the helper frame and an ID for the dom element on the parent page
@@ -202,8 +202,8 @@ var iFrameAutoSize = {
 
 			// Store the url of the helper frame and parent dom id in a cookie (persists the settings if the page within the frame changes)
 			if (settings.useCookie) {
-				iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
-				iFrameAutoSize.helpers.setCookie('iFrameAutoSize_parentDomId', settings.parentDomId);
+				iFrameAutoSize.helpers.setCookieWithFrameUrlKey('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
+				iFrameAutoSize.helpers.setCookieWithFrameUrlKey('iFrameAutoSize_parentDomId', settings.parentDomId);
 			}
 
 			// Function to inject an iframe from the parent domain that calls a JS function in the parent domain (neatly gets around cross domain scripting issues)
@@ -334,9 +334,49 @@ var iFrameAutoSize = {
 			}
 		},
 
+		// Cross browser function to get a session cookie based on the current URL or the referrer URL
+		setCookieWithFrameUrlKey: function(key, value) {
+			// Get the raw value of the cookie (there could be multiple entries if there are more than 1 iFrame from the same domain on the parent page)
+			var rawValue = iFrameAutoSize.helpers.getCookie(key);
+
+			// Loop through the values in the cookie and replace the setting for this iFrame
+			var items = rawValue.split("|");
+			var newCookieVal = "";
+			var replaced = false;
+			for (var i = 0; i < items.length; i++) {
+				if (newCookieVal != "") newCookieVal += "|";
+				if (items[i].indexOf(window.location.href + "~") == 0 || items[i].indexOf(document.referrer + "~") == 0) {
+					replaced = true;
+					newCookieVal += window.location.href + "~" + value;
+				} else {
+					newCookieVal += items[i];
+				}
+			}
+			if (!replaced) {
+				if (newCookieVal != "") newCookieVal += "|";
+				newCookieVal += window.location.href + "~" + value;
+			}
+			iFrameAutoSize.helpers.setCookie(key, newCookieVal);
+		},
+
 		// Cross browser function to get a session cookie
 		setCookie: function(key, value) {
 			document.cookie = key + "=" + escape(value);
+		},
+
+		// Cross browser function to get a session cookie based on the current URL or the referrer URL
+		getCookieWithFrameUrlKey: function(key) {
+			// Get the raw value of the cookie (there could be multiple entries if there are more than 1 iFrame from the same domain on the parent page)
+			var rawValue = iFrameAutoSize.helpers.getCookie(key);
+
+			// Loop through the values in the cookie and replace the setting for this iFrame
+			var items = rawValue.split("|");
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].indexOf(window.location.href + "~") == 0 || items[i].indexOf(document.referrer + "~") == 0) {
+					return items[i].replace(/^[^~]*~/, "");
+				}
+			}
+			return "";
 		},
 
 		// Cross browser function to get a session cookie
