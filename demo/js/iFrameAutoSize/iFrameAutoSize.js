@@ -233,15 +233,16 @@ var iFrameAutoSize = {
 					document.body.appendChild(pipe);
 				}
 
-				if (!iFrameAutoSize.iFrameSettings) {
-					iFrameAutoSize.iFrameSettings = {
+				if (!iFrameAutoSize.iFrameSettings) iFrameAutoSize.iFrameSettings = new Array();
+				if (!iFrameAutoSize.iFrameSettings[settings.parentDomId]) {
+					iFrameAutoSize.iFrameSettings[settings.parentDomId] = {
 						currHeight: 0,
 						currWidth: 0,
 						sizeAdjusted: false,
 						frameLoaded: false
 					}
 				}
-				var iFrameSettings = iFrameAutoSize.iFrameSettings;
+				var iFrameSettings = iFrameAutoSize.iFrameSettings[settings.parentDomId];
 				if (pageDimensions.height != iFrameSettings.currHeight || pageDimensions.width != iFrameSettings.currWidth) {
 					iFrameSettings.currWidth = pageDimensions.width;
 					iFrameSettings.currHeight = (iFrameSettings.frameLoaded ? pageDimensions.height : 0);
