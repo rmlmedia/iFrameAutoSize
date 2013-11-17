@@ -361,7 +361,7 @@ var iFrameAutoSize = {
 
 		// Cross browser function to get a session cookie
 		setCookie: function(key, value) {
-			document.cookie = key + "=" + escape(value);
+			document.cookie = key + "=" + escape(value) + "; path=/";
 		},
 
 		// Cross browser function to get a session cookie based on the current URL or the referrer URL
