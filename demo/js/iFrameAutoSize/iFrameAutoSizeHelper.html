@@ -44,14 +44,11 @@
 			function parentIFrameResize() {
 				if (parent && parent.parent && parent.parent.iFrameAutoSize) {
 					var iFrameAutoSize = parent.parent.iFrameAutoSize;
-					var connectionId = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'connectionId');
-					var messageNum = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'messageNum');
-					var domId = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'domId');
 					var domId = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'domId');
 					var width = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'width');
 					var height = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'height');
 					// This works as our parent's parent is on the same domain..
-					iFrameAutoSize.helpers.resizeIFrame(connectionId, messageNum, domId, width, height);
+					iFrameAutoSize.helpers.resizeIFrame(domId, width, height);
 				}
 			}
 		</script> 
