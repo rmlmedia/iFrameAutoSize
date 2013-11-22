@@ -273,12 +273,14 @@ var iFrameAutoSize = {
 			var iFrameSettings = iFrameAutoSize.iFrameSettings[domId];
 			if (iFrameSettings && iFrameSettings.iFrame) {
 				// Only process this if this is a new message from the child page (caters for packets being received out of order)
-				if (iFrameAutoSize.iFrameSettings[domId].connectionId != connectionId) {
-					iFrameAutoSize.iFrameSettings[domId].connectionId = connectionId;
-					iFrameAutoSize.iFrameSettings[domId].messageNum = 0;
+				if (iFrameSettings.connectionId != connectionId) {
+					iFrameSettings.connectionId = connectionId;
+					iFrameSettings.messageNum = 0;
 				}
-				if (iFrameAutoSize.iFrameSettings[domId].messageNum < messageNum) {
-					iFrameAutoSize.iFrameSettings[domId].messageNum = messageNum;
+				if (iFrameSettings.messageNum < messageNum) {
+					// Store the packet number and the time that this frame was resized
+					iFrameSettings.messageNum = messageNum;
+					// Resize the frame
 					iFrameSettings.iFrame.style.height = parseInt(height) + 'px';
 					if (iFrameSettings.adjustWidth) {
 						iFrameSettings.iFrame.style.width = parseInt(width) + 'px';
@@ -289,6 +291,7 @@ var iFrameAutoSize = {
 					if (typeof(iFrameSettings.onResize) == "function") {
 						iFrameSettings.onResize.apply(iFrameSettings.iFrame);
 					}
+					// Hide the loader
 					if (iFrameSettings.loader && height > 1) {
 						iFrameSettings.loader.style.display = 'none';
 					}

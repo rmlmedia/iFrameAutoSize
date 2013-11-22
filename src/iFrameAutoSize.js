@@ -91,7 +91,9 @@ var iFrameAutoSize = {
 					iFrame: null,
 					loader: null,
 					adjustWidth: false,
-					onResize: null
+					onResize: null,
+					connectionId: '',
+					messageNum: 0
 				}
 				var iFrameSettings = iFrameAutoSize.iFrameSettings[settings.domId];
 
@@ -185,7 +187,7 @@ var iFrameAutoSize = {
 		}
 		// Get the url of the helper frame from a cookie if not already provided
 		if (settings.useCookie && !settings.resizeHelperUrl) {
-			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookieWithFrameUrlKey('iFrameAutoSize_helperUrl');
+			settings.resizeHelperUrl = iFrameAutoSize.helpers.getCookie('iFrameAutoSize_helperUrl');
 		}
 
 		// Get the id of the dom element containing the iFrame on the parent page from the query string parameters if not already provided
@@ -202,7 +204,7 @@ var iFrameAutoSize = {
 
 			// Store the url of the helper frame and parent dom id in a cookie (persists the settings if the page within the frame changes)
 			if (settings.useCookie) {
-				iFrameAutoSize.helpers.setCookieWithFrameUrlKey('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
+				iFrameAutoSize.helpers.setCookie('iFrameAutoSize_helperUrl', settings.resizeHelperUrl);
 				iFrameAutoSize.helpers.setCookieWithFrameUrlKey('iFrameAutoSize_parentDomId', settings.parentDomId);
 			}
 
@@ -221,41 +223,34 @@ var iFrameAutoSize = {
 					}					
 				}
 
-				// 'Pipe' the page dimensions to the parent through the injected helper frame (which is on the same domain as the parent)
-				var pipe = document.getElementById('iFrameAutoSizePipe');
-				if (!pipe) {
-					pipe = document.createElement('IFRAME');
-					pipe.style.width = 0;
-					pipe.style.height = 0;
-					pipe.setAttribute('frameborder', 0);
-					pipe.setAttribute('id', 'iFrameAutoSizePipe');
-					pipe.setAttribute('visibility', 'hidden');
-					document.body.appendChild(pipe);
-				}
-
 				if (!iFrameAutoSize.iFrameSettings) iFrameAutoSize.iFrameSettings = new Array();
 				if (!iFrameAutoSize.iFrameSettings[settings.parentDomId]) {
 					iFrameAutoSize.iFrameSettings[settings.parentDomId] = {
 						currHeight: 0,
 						currWidth: 0,
-						sizeAdjusted: false,
-						frameLoaded: false
+						frameLoaded: false,
+						messageNum: 1,
+						connectionId: encodeURIComponent(window.location.href)
 					}
 				}
 				var iFrameSettings = iFrameAutoSize.iFrameSettings[settings.parentDomId];
 				if (pageDimensions.height != iFrameSettings.currHeight || pageDimensions.width != iFrameSettings.currWidth) {
 					iFrameSettings.currWidth = pageDimensions.width;
 					iFrameSettings.currHeight = (iFrameSettings.frameLoaded ? pageDimensions.height : 0);
-					if (!iFrameSettings.sizeAdjusted) {
-						pipe.setAttribute('src', settings.resizeHelperUrl + '?domId=' + settings.parentDomId + '&height=' + iFrameSettings.currHeight + '&width=' + iFrameSettings.currWidth + '&cacheb=' + Math.random());
+
+					// 'Pipe' the page dimensions to the parent through the injected helper frame (which is on the same domain as the parent)
+					if (!iFrameSettings.frameLoaded || iFrameSettings.currHeight != 0) {
+						pipe = document.createElement('IFRAME');
+						pipe.style.width = 0;
+						pipe.style.height = 0;
+						pipe.setAttribute('frameborder', 0);
+						pipe.setAttribute('id', 'iFrameAutoSizePipe');
+						pipe.setAttribute('visibility', 'hidden');
+						pipe.setAttribute('src', settings.resizeHelperUrl + '?connectionId=' + iFrameSettings.connectionId + '&messageNum=' + iFrameSettings.messageNum + '&domId=' + settings.parentDomId + '&height=' + iFrameSettings.currHeight + '&width=' + iFrameSettings.currWidth);
+						document.body.appendChild(pipe);
+						iFrameSettings.messageNum += 1;
 					}
-					if (!iFrameSettings.frameLoaded) {
-						iFrameSettings.frameLoaded = true;
-					} else {
-						iFrameSettings.sizeAdjusted = true;
-					}
-				} else {
-					iFrameSettings.sizeAdjusted = false;
+					iFrameSettings.frameLoaded = true;
 				}
 
 				// Set a timeout to continually adjust the page size
@@ -274,21 +269,32 @@ var iFrameAutoSize = {
 
 	helpers: {
 		// Private function called from the iFrameAutoSizeHelper.html to resize the iframe to fit the page contained within
-		resizeIFrame: function(domId, width, height) {
+		resizeIFrame: function(connectionId, messageNum, domId, width, height) {
 			var iFrameSettings = iFrameAutoSize.iFrameSettings[domId];
 			if (iFrameSettings && iFrameSettings.iFrame) {
-				iFrameSettings.iFrame.style.height = parseInt(height) + 'px';
-				if (iFrameSettings.adjustWidth) {
-					iFrameSettings.iFrame.style.width = parseInt(width) + 'px';
-				} else {
-					iFrameSettings.iFrame.style.width = '100%';
+				// Only process this if this is a new message from the child page (caters for packets being received out of order)
+				if (iFrameSettings.connectionId != connectionId) {
+					iFrameSettings.connectionId = connectionId;
+					iFrameSettings.messageNum = 0;
 				}
-				// Call the on resize function if it is defined
-				if (typeof(iFrameSettings.onResize) == "function") {
-					iFrameSettings.onResize.apply(iFrameSettings.iFrame);
-				}
-				if (iFrameSettings.loader && height > 1) {
-					iFrameSettings.loader.style.display = 'none';
+				if (iFrameSettings.messageNum < messageNum) {
+					// Store the packet number and the time that this frame was resized
+					iFrameSettings.messageNum = messageNum;
+					// Resize the frame
+					iFrameSettings.iFrame.style.height = parseInt(height) + 'px';
+					if (iFrameSettings.adjustWidth) {
+						iFrameSettings.iFrame.style.width = parseInt(width) + 'px';
+					} else {
+						iFrameSettings.iFrame.style.width = '100%';
+					}
+					// Call the on resize function if it is defined
+					if (typeof(iFrameSettings.onResize) == "function") {
+						iFrameSettings.onResize.apply(iFrameSettings.iFrame);
+					}
+					// Hide the loader
+					if (iFrameSettings.loader && height > 1) {
+						iFrameSettings.loader.style.display = 'none';
+					}
 				}
 			}
 		},
@@ -376,7 +382,8 @@ var iFrameAutoSize = {
 					return items[i].replace(/^[^~]*~/, "");
 				}
 			}
-			return "";
+			// If not found return the first item
+			return items[0].replace(/^[^~]*~/, "");
 		},
 
 		// Cross browser function to get a session cookie
