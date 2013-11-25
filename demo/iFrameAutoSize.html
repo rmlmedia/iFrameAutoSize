@@ -122,6 +122,8 @@
         adjustWidth: false, // A boolean indicating if the iFrame width should adjust too (defaults to false)
         initialWidth: '100%', // The initial width of the iFrame (defaults to 100%)
         initialHeight: '0px', // The initial height of the iFrame (defaults to 0px)
+        minHeight: '0', // A minumum height to set when calculating frame height (defaults to 0)
+        scrollOnResize: true, // If the scroll top should be set to the top of the frame once resize complete
         additionalCSS: '', // Extra CSS to set on the iFrame
         onResize: function() {} // A callback function to be called everytime the iframe is resized
     });

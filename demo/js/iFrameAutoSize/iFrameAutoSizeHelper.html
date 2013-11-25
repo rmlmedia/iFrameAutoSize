@@ -49,8 +49,9 @@
 					var domId = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'domId');
 					var width = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'width');
 					var height = iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'height');
+					var pageLoading = (iFrameAutoSize.helpers.getQueryStringParam(window.location.search, 'pageLoading') == 'true' ? true : false);
 					// This works as our parent's parent is on the same domain..
-					iFrameAutoSize.helpers.resizeIFrame(connectionId, messageNum, domId, width, height);
+					iFrameAutoSize.helpers.resizeIFrame(connectionId, messageNum, domId, width, height, pageLoading);
 				}
 			}
 		</script> 
