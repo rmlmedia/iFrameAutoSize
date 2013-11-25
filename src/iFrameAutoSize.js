@@ -70,8 +70,8 @@ if (!iFrameAutoSize) {
 				waitForPageLoad: (typeof(options) != 'undefined' && typeof(options.waitForPageLoad) != 'undefined' ? options.waitForPageLoad : false),
 				adjustWidth: (typeof(options) != 'undefined' && typeof(options.adjustWidth) != 'undefined' ? options.adjustWidth : false),
 				initialWidth: (typeof(options) != 'undefined' && typeof(options.initialWidth) != 'undefined' ? options.initialWidth : '100%'),
-				initialHeight: (typeof(options) != 'undefined' && typeof(options.initialHeight) != 'undefined' ? options.initialHeight : '0px'),,
-				minHeight: (typeof(options) != 'undefined' && typeof(options.minHeight) != 'undefined' ? options.minHeight.replace(/ ?px/, '') : 0)
+				initialHeight: (typeof(options) != 'undefined' && typeof(options.initialHeight) != 'undefined' ? options.initialHeight : '0px'),
+				minHeight: (typeof(options) != 'undefined' && typeof(options.minHeight) != 'undefined' ? options.minHeight.replace(/ ?px/, '') : 0),
 				scrollOnResize: (typeof(options) != 'undefined' && typeof(options.scrollOnResize) != 'undefined' ? options.scrollOnResize : true),
 				additionalCSS: (typeof(options) != 'undefined' && typeof(options.additionalCSS) != 'undefined' ? options.additionalCSS : ''),
 				loaderCSS: (typeof(options) != 'undefined' && typeof(options.loaderCSS) != 'undefined' ? options.loaderCSS : ''),
