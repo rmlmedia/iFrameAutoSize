@@ -216,7 +216,7 @@ if (!iFrameAutoSize) {
 				function pipeDimensionsToParentIFrame()	{
 					// Get the page height and width
 					var pageDimensions = iFrameAutoSize.helpers.getPageDimensions();
-					if (settings.domId) {
+					if (settings.domId && document.getElementById(settings.domId)) {
 						pageDimensions = iFrameAutoSize.helpers.getDimensions(document.getElementById(settings.domId));
 					} else {
 						var wrapperDiv = document.getElementsByTagName('div')[0];
@@ -349,9 +349,11 @@ if (!iFrameAutoSize) {
 				var framePosition = iFrameAutoSize.helpers.getPageOffset(elem);
 				var scrollPosition = iFrameAutoSize.helpers.getScrollPosition();
 				var pixelsHiddenY = (scrollPosition.top - framePosition.top < 0 ? 0 : scrollPosition.top - framePosition.top);
-				pixelsHiddenY += ((framePosition.top + frameDimensions.height - pixelsHiddenY) - (scrollPosition.top + window.innerHeight) < 0 ? 0 : (framePosition.top + frameDimensions.height - pixelsHiddenY) - (scrollPosition.top + window.innerHeight));
+				var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+				var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+				pixelsHiddenY += ((framePosition.top + frameDimensions.height - pixelsHiddenY) - (scrollPosition.top + windowHeight) < 0 ? 0 : (framePosition.top + frameDimensions.height - pixelsHiddenY) - (scrollPosition.top + windowHeight));
 				var pixelsHiddenX = (scrollPosition.left - framePosition.left < 0 ? 0 : scrollPosition.left - framePosition.left);
-				pixelsHiddenX += ((framePosition.left + frameDimensions.width - pixelsHiddenX) - (scrollPosition.left + window.innerWidth) < 0 ? 0 : (framePosition.left + frameDimensions.width - pixelsHiddenX) - (scrollPosition.left + window.innerWidth));
+				pixelsHiddenX += ((framePosition.left + frameDimensions.width - pixelsHiddenX) - (scrollPosition.left + windowWidth) < 0 ? 0 : (framePosition.left + frameDimensions.width - pixelsHiddenX) - (scrollPosition.left + windowWidth));
 				var percentageVisibleY = (frameDimensions.height != 0 ? (frameDimensions.height - pixelsHiddenY) / frameDimensions.height * 100 : 1);
 				var percentageVisibleX = (frameDimensions.width != 0 ? (frameDimensions.width - pixelsHiddenX) / frameDimensions.width * 100 : 1);
 				var percentageShown = Math.min(percentageVisibleY, percentageVisibleX);
