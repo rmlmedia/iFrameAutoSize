@@ -313,9 +313,9 @@ if (!iFrameAutoSize) {
 						iFrameSettings.messageNum = messageNum;
 						// Resize the frame
 						if (height > 0) {
-							iFrameSettings.domElem.style.height = parseInt(Math.max(settings.minHeight, height)) + 'px';
+							iFrameSettings.domElem.style.height = parseInt(Math.max(iFrameSettings.minHeight, height)) + 'px';
 						}
-						iFrameSettings.iFrame.style.height = parseInt(Math.max(settings.minHeight, height)) + 'px';
+						iFrameSettings.iFrame.style.height = parseInt(Math.max(iFrameSettings.minHeight, height)) + 'px';
 						if (iFrameSettings.adjustWidth) {
 							iFrameSettings.iFrame.style.width = parseInt(width) + 'px';
 						} else {
