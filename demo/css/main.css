@@ -17,12 +17,12 @@ ol.linenums {
 	overflow: hidden; /*To contain floats*/
 }
 
-#iFrame {
-	margin: 1em 0;
+.tab-content {
+	overflow: hidden;
+	margin-bottom: 1em;
 }
 
-#iFrame, #iFrame iframe {
-	float: left;
+iframe {
 	width: 100%;
 }
 
