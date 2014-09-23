@@ -86,7 +86,7 @@
 
                         <p>On parent site upload the iFrameAutoSizeHelper.html page and include the following before the closing body tag on all pages:</p>
                         <pre class="prettyprint linenums">
-&lt;script src="//iframedomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This needs to reference the script from the iframe domain</strong></u> --&gt;
+&lt;script src="/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This needs to reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
         domId: "xxx",  // Id of dom element to add iFrame to (required)
@@ -97,7 +97,7 @@
 </pre>
                         <p>On the embedded site upload the iFrameAutoSize.min.js script and include the folowing before the closing body tag on all pages:</p>
                         <pre class="prettyprint linenums">
-&lt;script src="//iframedomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must be the same as the script reference on the parent domain</strong></u> --&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
     iFrameAutoSize.resize({
         domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to document height)
@@ -111,7 +111,7 @@
                     <div class="span12">
                         <p>On parent site upload the iFrameAutoSizeHelper.html page and include the following before the closing body tag on all pages:</p>
                         <pre class="prettyprint linenums">
-&lt;script src="//iframedomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This needs to reference the script from the iframe domain</strong></u> --&gt;
+&lt;script src="/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This needs to reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
         domId: "xxx",  // Id of dom element to add iFrame to (required)
@@ -131,7 +131,7 @@
 </pre>
                         <p>On the embedded site upload the iFrameAutoSize.min.js script and include the folowing before the closing body tag on all pages:</p>
                         <pre class="prettyprint linenums">
-&lt;script src="//iframedomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must be the same as the script reference on the parent domain</strong></u> --&gt;
+&lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
 &lt;script&gt;
     iFrameAutoSize.forceParentFrame({
