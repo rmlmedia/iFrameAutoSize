@@ -7,7 +7,7 @@
  * Usage: http://scripts.deependmelbourne.com.au/iFrameAutoSize.html
  * 
  * Author: Rick Lannan, Deepend
- * Version: 1.1 
+ * Version: 1.2 
  * References: http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
  * Copyright (C): Rick Lannan, 2013 
  * Distibution & Modification: GNU License, please give credit
@@ -282,6 +282,7 @@ if (!iFrameAutoSize) {
 			// Private function called from the iFrameAutoSizeHelper.html to resize the iframe to fit the page contained within
 			resizeIFrame: function(connectionId, messageNum, domId, width, height, pageLoading) {
 				var iFrameSettings = iFrameAutoSize.iFrameSettings[domId];
+				var messageNumber = parseInt(messageNum);
 				// If the frame could not be found, default to the frame that is visible on the page (determined by page position)
 				if (!iFrameSettings) {
 					var maxPercentageShown = -1;
@@ -307,10 +308,10 @@ if (!iFrameAutoSize) {
 						iFrameSettings.connectionId = connectionId;
 						iFrameSettings.messageNum = 0;
 					}
-					if (iFrameSettings.messageNum < messageNum) {
+					if (iFrameSettings.messageNum < messageNumber) {
 						var pageLoaded = (iFrameSettings.pageLoaded || !pageLoading);
 						// Store the packet number
-						iFrameSettings.messageNum = messageNum;
+						iFrameSettings.messageNum = messageNumber;
 						// Resize the frame
 						if (height > 0) {
 							iFrameSettings.domElem.style.height = parseInt(Math.max(iFrameSettings.minHeight, height)) + 'px';
