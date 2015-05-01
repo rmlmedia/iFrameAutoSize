@@ -100,7 +100,8 @@
 &lt;script src="//parentdomain.com/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This must reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
     iFrameAutoSize.resize({
-        domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to document height)
+        domId: "xxx", // Id of dom element to use to get page dimensons (recommended as it defaults to document height which can be inconsistent).
+                      // Do not use on a dom element with 100% height set as it can cause resize loops
     });
 &lt;/script&gt;
 </pre>
@@ -114,10 +115,11 @@
 &lt;script src="/path/to/iFrameAutoSize.min.js"&gt;&lt;/script&gt; &lt;!-- <strong><u>This needs to reference the script from the parent domain</strong></u> --&gt;
 &lt;script&gt;
     iFrameAutoSize.create({
-        domId: "xxx",  // Id of dom element to add iFrame to (required)
-        iFrameUrl: "//iframedomain.com/path/to", // Url of the page to embed in the iFrame (required)
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html",  // <strong><u>This must be served from the parent domain (required)</strong></u>
-        loaderUrl: "path/to/loader.gif", // Url of a loader GIF that should be shown (none shown by default)
+        domId: 'xxx',  // Id of dom element to add iFrame to (required)
+        iFrameUrl: '//iframedomain.com/path/to', // Url of the page to embed in the iFrame (required)
+        resizeHelperUrl: '//parentdomain.com/path/to/iFrameAutoSizeHelper.html',  // <strong><u>This must be served from the parent domain (required)</strong></u>
+        loaderUrl: 'path/to/loader.gif', // Url of a loader GIF that should be shown (none shown by default)
+        loaderCSS: '', // Extra CSS to set on the loader
         waitForPageLoad: true, // A boolean indicating if the code should wait for the window.onload event (defaults to true)
         adjustWidth: false, // A boolean indicating if the iFrame width should adjust too (defaults to false)
         initialWidth: '100%', // The initial width of the iFrame (defaults to 100%)
@@ -138,12 +140,16 @@
         parentUrl: '//parentdomain.com/path/to' // A url to redirect to if an iFrame page is accessed directly
     });
     iFrameAutoSize.resize({
-        domId: "xxx", // Id of dom element to use to get page dimensons, this will return the best results cross browser (defaults to document height)
+        domId: "xxx", // Id of dom element to use to get page dimensons (recommended as it defaults to document height which can be inconsistent).
+                      // Do not use on a dom element with 100% height set as it can cause resize loops
         resizeOnLoadOnly: false, // Indicated if the resize should only occur on the initial page load (defaults to false)
         waitForPageLoad: true, // A boolean indicating if the code should wait for the window.onload event (defaults to true)
         useCookie: true, // A boolean indicating if the resize helper URL should be stored in a cookie (defaults to true)
-        parentDomId: "xxx", // The id of the dom element containing the iFrame on the parent page. This is ony needed if the iFrame uses redirects that drop query string parameters.
-        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html" // Only needed if the iFrame uses redirects that drop query string parameters. <strong><u>Must be a link to iFrameAutoSizeHelper.html on the parent domain using the same protocol as the parent domain</u></strong>
+        parentDomId: "xxx", // The id of the dom element containing the iFrame on the parent page.
+                            // This is ony needed if the iFrame uses redirects that drops query string params.
+        resizeHelperUrl: "//parentdomain.com/path/to/iFrameAutoSizeHelper.html" // Only needed if the iFrame uses redirects that drop query string params.
+                                                                                // <strong><u>Must be a link to iFrameAutoSizeHelper.html on the parent domain</u></strong>
+                                                                                // <strong><u>using the same protocol as the parent domain</u></strong>
     });
 &lt;/script&gt;
 </pre>
